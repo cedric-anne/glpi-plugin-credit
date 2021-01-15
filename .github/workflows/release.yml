@@ -1,0 +1,14 @@
+name: "Plugin release"
+
+on:
+  push:
+#    tags:
+#       - '*'
+
+jobs:
+  create-release:
+    name: "Create release"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Test"
+        uses: cedric-anne/glpi-project-tools/github-actions/build-package@feature/release-action
