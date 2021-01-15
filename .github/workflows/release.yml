@@ -14,11 +14,29 @@ jobs:
         uses: "actions/checkout@v2"
       - name: "Build package"
         id: "build-package"
-        uses: cedric-anne/glpi-project-tools/github-actions/build-package@feature/release-action
+        uses: cedric-anne/glpi-project-tools/github-actions/build-package@feature/release-action # TODO switch to official repo
         with:
-          plugin-version: "1.8.0" #TODO 
+          plugin-version: "1.8.0" #TODO ${{ github.ref }}
       - name: "Upload package artifact"
-        uses: actions/upload-artifact@v2
+        uses: "actions/upload-artifact@v2"
         with:
           name: ${{ steps.build-package.outputs.package-basename }}
           path: ${{ steps.build-package.outputs.package-path }}
+      - name: "Create release"
+        id: "create-release"
+        uses: "actions/create-release@v1"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: "1.8.0" #TODO ${{ github.ref }}
+          release_name: "1.8.0-test" #TODO ${{ github.ref }}
+          draft: true
+      - name: "Attach package to release"
+        uses: "actions/upload-release-asset@v1"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create-release.outputs.upload_url }}
+          asset_path: ${{ steps.build-package.outputs.package-path }}
+          asset_name: ${{ steps.build-package.outputs.package-basename }}
+          asset_content_type: " application/x-bzip2"
