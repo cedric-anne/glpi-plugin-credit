@@ -12,7 +12,13 @@ jobs:
     steps:
       - name: "Checkout"
         uses: "actions/checkout@v2"
-      - name: "Test"
+      - name: "Build package"
+        id: "build-package"
         uses: cedric-anne/glpi-project-tools/github-actions/build-package@feature/release-action
         with:
-          plugin-version: "1.8.0"
+          plugin-version: "1.8.0" #TODO 
+      - name: "Upload package artifact"
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ steps.build-package.outputs.package-basename }}
+          path: ${{ steps.build-package.outputs.package-path }}
