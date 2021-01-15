@@ -15,4 +15,4 @@ jobs:
       - name: "Test"
         uses: cedric-anne/glpi-project-tools/github-actions/build-package@feature/release-action
         with:
-          plugin-version: "1.0"
+          plugin-version: "1.8.0"
